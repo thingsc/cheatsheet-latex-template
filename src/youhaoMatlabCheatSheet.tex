@@ -1,0 +1,61 @@
+\documentclass[8pt]{innovativeinnovation-cheatsheet}
+\definecolor{myred}{RGB}{250,127,111}
+\usepackage{enumitem}
+\lstset{
+    basicstyle=\ttfamily,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4,
+    showstringspaces=true,
+    extendedchars=true,
+    inputencoding=utf8,
+    frame=single,
+    language=Matlab,
+    captionpos=b,
+    keywordstyle=\color{innoinnored}\bfseries,
+%     numbers=left,
+%     numberstyle=\tiny\color{gray},
+}
+
+
+
+\cheatsheettitle{MATLA Cheat Sheet --- Youhao HU}
+
+\begin{document}
+
+\begin{multicols*}{3}
+
+
+\cheatsheetsection{MATLAB Command line}
+
+\begin{enumerate}[leftmargin=*,nosep]
+    \item[$\bullet$] \lstinline!dir!: list files and folders in current folder
+    \item[$\bullet$] \lstinline!dir('*.txt')!: find txt files in current folder
+    \item[$\bullet$] \lstinline!pwd!: show current folder
+    \item[$\bullet$] \lstinline!cd!:  change current folder
+    \item[$\bullet$] \lstinline!delete('filename')!: delete file
+    \item[$\bullet$] {\color{innoinnored}\bfseries\ttfamily movefile}\lstinline{('oldpath/oldname','newpath/newname')}: rename or move file    
+    \item[$\bullet$] \lstinline!what!: list Matlab/simulink files in current folder
+    \item[$\bullet$] {\color{innoinnored}\bfseries\ttfamily more on}: display output one screen at a time, space to continue, q to quit
+    \item[$\bullet$] {\color{innoinnored}\bfseries\ttfamily more off}: display output continuously
+\end{enumerate}
+
+\cheatsheetsection{Legend rendered in \LaTeX}
+
+\begin{lstlisting}
+h = legend(legend1,legend2);% for instance, legend1 = $x_1$
+set(h,'interpreter','latex')
+title('nameoftitle','interpreter','latex')% for instance, name = $V_o$
+\end{lstlisting}
+
+
+Dolor sed viverra ipsum nunc aliquet bibendum. Senectus et netus et malesuada
+fames ac turpis egestas. Pellentesque id nibh tortor id aliquet.
+
+\vfill
+
+\cheatsheetfooter{Innovative Innovation}{https://github.com/innovativeinnovation}
+
+\end{multicols*}
+
+\end{document}

@@ -1,0 +1,135 @@
+\documentclass[8pt]{innovativeinnovation-cheatsheet}
+\definecolor{myred}{RGB}{250,127,111}
+\lstset{
+    basicstyle=\ttfamily,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4,
+    showstringspaces=true,
+    extendedchars=true,
+    inputencoding=utf8,
+    frame=single,
+    language=[LaTeX]TeX,
+    captionpos=b,
+    keywordstyle=\color{innoinnored}\bfseries,
+%     numbers=left,
+%     numberstyle=\tiny\color{gray},
+}
+
+
+
+\cheatsheettitle{\LaTeX \, Cheat Sheet --- Youhao HU}
+
+\begin{document}
+
+\begin{multicols*}{3}
+
+\cheatsheetsection{Two columns}
+
+\begin{lstlisting}
+\begin{columns}
+\begin{column}{.5\linewidth}
+Here is the content in column 1
+\end{column}
+\begin{column}{.5\linewidth}
+Here is the content in column 2
+\end{column}
+\end{columns}
+\end{lstlisting}
+
+\cheatsheetsection{Footnote in two columns}
+
+\begin{lstlisting}
+\begin{frame}
+\begin{columns}
+\begin{column}{.5\linewidth}
+Here is the content in column 1 \footnotemark[1]
+\end{column}
+\begin{column}{.5\linewidth}
+Here is the content in column 2
+\end{column}
+\end{columns}
+\footnotetext[1]{This is the first footnote}
+\end{frame}
+\end{lstlisting}
+
+
+
+\cheatsheetsection{Figure with 1 title}
+
+\begin{lstlisting}
+\begin{figure}
+\caption{HKUSTGZ Logo}
+\includegrapics[width=.5\linewidth](USTGZ.png)
+\label{fig:USTGZLogo}
+\end{figure}
+\end{lstlisting}
+
+
+\cheatsheetsection{Figure options}
+\begin{lstlisting}
+\includegraphics[scale=0.1](USTGZ.png)
+\includegraphics[width=.5\linewidth](USTGZ.png)
+\includegraphics[height=1cm](USTGZ.png)
+\end{lstlisting}
+
+\vfill
+
+\textit{Use} \verb|\columnbreak| \textit{to break the column}
+
+\columnbreak
+
+\cheatsheetsection{Figure with 2+ titles (no tag)}
+\begin{lstlisting}
+\begin{center}
+\includegraphics[width=.4\linewidth]{SMC.png}
+\includegraphics[width=.4\linewidth]{TSMC.png}\\
+SMC (Left) and TSMC (Right) comparison
+\end{center}
+\end{lstlisting}
+
+
+\cheatsheetsection{Figure with 2+ titles (1 tag)}
+
+\begin{lstlisting}
+\begin{figure}
+\centering
+\includegraphics[width=.4\linewidth]{SMC.png}
+\includegraphics[width=.4\linewidth]{TSMC.png}\\
+\caption{SMC (Left) and TSMC (Right) comparison}
+\label{fig:TSMCom}
+\end{figure}
+\end{lstlisting}
+
+\cheatsheetsection{Figure with 2+ titles (2+ tags)}
+
+
+\begin{lstlisting}
+\usepackage{graphicx}
+\usepackage{subcation}
+
+\begin{figure}
+\caption{SMC with changing load}
+\begin{subfigure}{.4\linewidth}
+\caption{Scope}
+\includegraphics[width=\linewidth] {SMC_15_25_Scope.png}
+\end{subfigure}
+\begin{subfigure}{.4\linewidth}
+\caption{MATLAB}
+\includegraphics[width=\linewidth] {SMC_15_25.png}
+\end{subfigure}
+\label{fig:Tracking}
+\end{figure}
+\end{lstlisting}
+
+
+Dolor sed viverra ipsum nunc aliquet bibendum. Senectus et netus et malesuada
+fames ac turpis egestas. Pellentesque id nibh tortor id aliquet.
+
+\vfill
+
+\cheatsheetfooter{Innovative Innovation}{https://github.com/innovativeinnovation}
+
+\end{multicols*}
+
+\end{document}
