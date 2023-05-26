@@ -1,0 +1,209 @@
+\documentclass[8pt]{innovativeinnovation-cheatsheet}
+\definecolor{myred}{RGB}{173, 0, 21}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{circuitikz}
+\usepackage{siunitx}
+\tikzset{>=latex} % for LaTeX arrow head	
+\ctikzset{resistors/scale=0.5}			
+\ctikzset{capacitors/scale=0.5}
+\ctikzset{inductors/scale=0.5}
+\ctikzset{sources/scale=0.6}
+\ctikzset{diodes/scale=0.6}
+
+\def\killdepth#1{{\raisebox{0pt}[\height][0pt]{#1}}}
+\def\coord(#1){coordinate(#1)} 
+\def\coord(#1){coordinate(#1) node[circle, red, draw, inner sep=1pt, pin={[red, overlay, inner sep=0.5pt, font=\tiny, pin distance=0.1cm, pin edge={red, overlay,-}]45:#1}](#1-node){}}	
+% Uncomment the above line to show the coordinate node in the circuit
+
+\newcount\myfigurecount
+\newcount\mytablecount
+\myfigurecount = 1
+\mytablecount  = 1
+
+\cheatsheettitle{Power Electronics Cheat Sheet --- Youhao HU}
+
+\begin{document}
+
+\begin{multicols*}{3}
+
+\cheatsheetsection{SS-Type Wireless Power Transfer}
+
+\begin{center}
+\centering
+\begin{tikzpicture}[american, line width=0.2mm]
+\def\w{3}
+\def\h{2}
+\def\wT{1}
+
+\draw (0,0) 
+to[sV, l_=$V_1$] ++(0,\h) \coord(U1top)
+to[C, l_=$C_1$, i=$I_1$] ++(\w,0) 
+to[L, l_=$L_1$, name=L1] ++(0,-\h) \coord(end1)
+to[R, l_=$R_1$] (0,0);	
+
+\draw (end1)++(\wT,0) \coord(begin2)
+to[L, l_=$L_2$, name=L2] ++(0,\h) 
+to[C, l_=$C_2$, i<=$I_2$] ++(\w,0)
+to[R, l_=$R_\text{L}$] ++(0,-\h)
+to[R, l_=$R_2$] (begin2);
+
+\draw
+[<->,violet!90] (L1.core west) \coord(L1cw) to[out=60, in=120]
+node[midway, above]{$M$} (L2.core east) \coord(L2ce);	
+\end{tikzpicture}
+\end{center}
+
+Resonant frequency $f$, angular frequency $\omega$:
+\begin{equation*}
+\begin{aligned}
+f &= \frac{1}{2 \pi \sqrt{L_1 C_1}} = \frac{1}{2 \pi \sqrt{L_2 C_2}}\\
+\omega &= 2 \pi f
+\end{aligned}
+\end{equation*}
+
+\begin{multicols*}{2}
+    
+Equivalent resistance:
+\begin{equation*}
+\begin{aligned}
+Z_{in1} & = R_1 + \frac{\omega^2 M^2}{R_2 +R_e}\\
+Z_{in2} & = j \left[ \omega M + \frac{R_1 (R_2 + R_e)}{\omega M} \right]\\
+&\approx j\omega M
+\end{aligned}
+\end{equation*}
+
+\columnbreak
+
+Inverter output voltage $V_1$, rectifier input voltage $V_2$:
+\begin{equation*}
+\begin{aligned}
+V_1 &\approx \frac4\pi V_{\text{DC}} \sin (\omega t) = 1.27 V_{\text{DC}}\sin(\omega t)\\
+V_2 & = R_e I_2 = \frac{4 R_e V_{\text{DC}} \cos (\omega t) }{\pi \left[ \omega M + \frac{R_1 (R_2 + R_e)}{\omega M} \right]} \\
+& \approx \frac{4 R_e}{\pi \omega M} V_{\text{DC}}\cos(\omega t)
+\end{aligned}
+\end{equation*}
+\end{multicols*}
+
+Current:
+
+\begin{equation*}
+\begin{aligned}
+I_1 &= \frac{V_1}{Z_{in1}} =\frac{4V_{\text{DC}} \sin (\omega t) }{\pi \left(R_1 + \frac{\omega^2 M^2}{R_2 +R_e} \right)} \\
+I_2 &= \frac{V_1}{Z_{in2}} = \frac{4V_{\text{DC}} \cos (\omega t) }{\pi \left[ \omega M + \frac{R_1 (R_2 + R_e)}{\omega M} \right]} \approx \frac{4}{\pi \omega M} V_{\text{DC}}\cos(\omega t) 
+\end{aligned}
+\end{equation*}
+
+{\color{myred} Note}: $I_2$ is constant with respective to different $R_L$ since $R_1\approx 0$.
+
+\cheatsheetsection{RMS value}
+
+\begin{multicols*}{2}
+\begin{equation*}
+    V = V_m \sin(\omega t)
+\end{equation*}
+\begin{equation*}
+    V_{\text{RMS}} = \sqrt{\frac{1}{2\pi} \int_0^{2\pi} V^2 \, \mathrm{d}t} = \frac{V_m}{\sqrt{2}}
+\end{equation*}
+\end{multicols*}
+
+\columnbreak
+
+\cheatsheetsection{Phsae Shift Control}
+
+
+\begin{center}
+    \begin{circuitikz}[american]
+        \draw (0,0) \coord(origin);
+        \draw (0,2.7) \coord(U1);
+        \draw (U1) to[V, l = $V_{DC}$] (origin);
+        \draw (U1) to[short,-*] ++(1.5,0) \coord(U2);
+        \draw (U2) -- ++(1.5,0) \coord(U3);
+        \draw (U2) --++(0,-.2) \coord(M1);
+        \draw (M1) node[nigfete, bodydiode, scale = .6, anchor = D](S1){S1};
+        \draw (S1.S) to[short, -*]++(0,-.25) \coord(M21);
+        \draw (S1.S) --++(0,-.5) \coord(M2);
+        \draw (M2) node[nigfete, bodydiode, scale = .6, anchor = D](S2){S2};
+        \draw (S2.S) --++(0,-.1) \coord(M3);
+    
+    
+        \draw (U3) --++(0,-.2) \coord(SM1);
+        \draw (SM1) node[nigfete, bodydiode, scale = .6, anchor = D](S4){S4};
+        \draw (S4.S) to[short, -*]++(0,-.25) \coord(SM21);
+        \draw (S4.S) -- ++(0,-.5) \coord(SM2);
+        \draw (SM2) node[nigfete, bodydiode, scale = .6, anchor = D](S3){S3};
+        \draw (S3.S) --++(0,-.1) \coord(SM3);
+        \draw (origin) to[short,-*]  (M3|-origin)\coord(B1);
+        \draw (B1) -- (SM3|-origin) \coord(B2);
+    
+        \draw(M3) -- (B1);
+        \draw(SM3) -- (B2);
+    
+        \draw(M21) to[R] (SM21);
+        % \draw[help lines, red, step = .5cm] (origin) grid ++(U3);
+    \end{circuitikz}
+\end{center}
+
+\begin{equation*}
+\begin{aligned}
+S_1 &= \bar S_2 = \frac{1}{2} \left\{ \mathrm{sign} \left[ \sin \left( \omega t + \frac{D}{2} \pi- \frac{2 \pi}{4} \right) \right] + 1 \right\}\\
+S_3 &= \bar S_4 =\frac{1}{2} \left\{ \mathrm{sign} \left[ \sin \left( \omega t - \frac{D}{2} \pi- \frac{2 \pi}{4} \right) \right] + 1 \right\}\\
+V_R &= V_{\mathrm{DC}} (S_1 - S_3) \approx \frac4\pi V_{\mathrm{DC}}\sin\left(D\frac\pi2\right)\sin(\omega t)
+\end{aligned} 
+\end{equation*}
+
+\cheatsheetsection{Full Bridge Rectifier}
+
+\begin{center}
+\begin{circuitikz}[american, line width = .2mm]
+\draw (0,0)\coord(origin);
+% \draw [help lines, red, step=.5cm] (0,-.5) grid (4,2);
+\draw (0,2) \coord (U1);
+\draw (2,2) \coord(U2);
+\draw (2,0) \coord(B1);
+\draw (origin) to [sV] (U1);
+\draw (U1) to[short, -*] (U2);
+\path (U2) --++(-1,-1) \coord(C1);
+\path (U2) --++(1,-1) \coord(C2);
+\draw (C1) to[empty diode, fill = myred, color = myred] (U2);
+\draw (U2) to [full diode] (C2);
+\draw (C1) to [empty diode] (B1);
+\draw (B1) to [empty diode] (C2);
+\draw (origin) to[short,-*] (B1);
+\draw (C2) to[short,-*] (C2);
+
+\draw (C2) --++(1,0) \coord(C3);
+\path (C3) --++(0,-1.5) \coord(B2);
+\draw (C3) to[R] (B2);
+\draw (B2) -- (C1|-B2) \coord(B3);
+\path (B3) -- (B3|-origin) \coord(B4);
+\draw (B4) node[jump crossing, rotate = 90] (J1){};
+\draw (J1.west) -- (B3);
+\draw (J1.east) to[short,-*] (C1);
+\end{circuitikz}
+\end{center}
+
+
+Average output voltage:
+
+\begin{equation*}
+\begin{aligned}
+V_{ave} &= \frac1\pi \int_\alpha^\pi \sqrt2V_s \sin (\omega t) d(\omega t) = \frac{2\sqrt2V_s}{\pi} \frac{1+\cos\alpha}{2}\\
+\end{aligned}
+\end{equation*}
+
+
+
+
+
+
+
+
+
+\vfill
+
+\cheatsheetfooter{Innovative Innovation}{https://github.com/innovativeinnovation}
+
+\end{multicols*}
+
+\end{document}

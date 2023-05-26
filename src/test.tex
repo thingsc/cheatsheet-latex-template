@@ -1,0 +1,70 @@
+\documentclass{article}
+\usepackage[european, straightvoltages]{circuitikz}
+\usetikzlibrary{babel}
+
+
+\def\killdepth#1{{\raisebox{0pt}[\height][0pt]{#1}}}
+\def\coord(#1){coordinate(#1)} 
+\def\coord(#1){coordinate(#1) node[circle, red, draw, inner sep=1pt, pin={[red, overlay, inner sep=0.5pt, font=\tiny, pin distance=0.1cm, pin edge={red, overlay,-}]45:#1}](#1-node){}}	
+
+\begin{document}
+\begin{circuitikz}
+\draw (0,0) node[en amp](aop1){AO1};
+\draw (aop1.+) 
+    to[short] ++(0,-2) node[ground](GND){};
+\draw (aop1.-) 
+    --++(0,1.5) \coord (in-1) 
+    --++(-2,0)  node[npn, photo, anchor=E](photo){} ;
+\draw (photo.C) 
+    --++(-2,0) \coord (pile) 
+    to[battery2] (pile|-GND);
+\draw (in-1) 
+    to [vR, mirror] (in-1 -|aop1.out) 
+    to[short] (aop1.out);
+\draw (aop1.out)  
+    --++(1,0) \coord (out1) 
+    to[R] ++(2,0) \coord (in-2)  
+    --++(0.5,0) node[en amp, anchor=-](aop2){AO2};
+\draw (photo.C) 
+    --(photo.C-|out1) \coord (jump);
+\node at (aop1.out-|jump) [jump crossing, rotate=90](J){};
+\draw (jump)
+    -- (J.east);
+\draw (J.west)
+    to[pR, n=curseur] (jump|-GND)
+    to [short] (jump|-GND) ;
+\draw (in-2) 
+    --(in-2|-curseur.wiper) \coord(ao2r) 
+    to[R] (ao2r-|curseur.wiper) 
+    to[short] (curseur.wiper);
+\draw (aop2.+)
+    to[short] (aop2.+|-GND);
+\draw (in-2)
+    --++(0,1.5) \coord(RC)
+    to [R] (RC -|aop2.out);
+\draw (RC)
+    --++(0,1) \coord (C) 
+    to[C] (C-|aop2.out)
+    to[short] (aop2.out);
+\path (aop2.center) ++(2,0) \coord (in-3) ++(1,0) node[en amp, anchor=-](aop3){};
+\draw (aop2.out)
+    -| (aop3.-);
+\draw (jump)
+    --(jump-|in-3) \coord (jump2);
+\node at (aop2.out-|jump2) [jump crossing, rotate=90](J2){};
+\draw (jump2)
+    -- (J2.east);
+\draw (J2.west)
+    to[pR, n=curseur2] (jump2|-GND)
+    to [short] (jump2|-GND) ;
+\draw (aop3.+)
+    -|(curseur2.wiper);
+\draw (aop3.out) 
+    to[R] ++(3,0) \coord (ledR)
+    to[leDo] (ledR|-GND);
+\draw (GND)
+    to[short] (GND-|ledR);
+\draw (GND)
+    to[short] (GND-|pile);
+\end{circuitikz} 
+\end{document}

@@ -1,0 +1,50 @@
+\documentclass{article}
+
+\usepackage{circuitikz}
+\usepackage{multicol}
+
+\def\killdepth#1{{\raisebox{0pt}[\height][0pt]{#1}}}
+\def\coord(#1){coordinate(#1)}
+\def\coord(#1){coordinate(#1) node[circle, red, draw, inner sep=1pt, pin={[red, overlay, inner sep=0.5pt, font=\tiny, pin distance=0.1cm, pin edge={red, overlay,-}]45:#1}](#1-node){}}	
+% Uncomment the above line to show the coordinate node in the circuit
+
+\begin{document}
+
+
+\begin{multicols*}{3}
+    \begin{figure}
+    \centering
+    \begin{circuitikz}[american,line width = .2mm]
+    \ctikzset{voltage dir=RP}
+    \ctikzset{batteries/scale = .8}
+    \ctikzset{transistors/scale = .8}
+    \ctikzset{inductors/scale = .6}
+    \ctikzset{capacitors/scale = .6}
+    \ctikzset{diodes/scale = .6}
+    \ctikzset{electromechanicals/scale = .8}
+    \draw (0,0) \coord(origin);
+    \path (origin) ++ (4,2) \coord(U1);
+    % \draw[help lines, red, step = 1cm] (origin) grid ++(U1);
+    \draw (origin) to[battery1] (U1-|origin) \coord(U2);
+    \draw (U2) to[short] ++(1,0) \coord(U3);
+    \draw (U3) node[nigfete, bodydiode, fill = black, anchor=D, rotate = 90](S1){};
+    \draw (S1.S) -- ++(1,0) \coord(U4);
+    \draw (U4) to[L, l_ = $L_b$] ++ (1,0)\coord(U5);
+    \draw (U5) to[short, -*] ++(1,0)\coord(U6);
+    \draw (U6) to[C, l_ = $C_b$] (U6|-origin)\coord(B1);
+    \draw (B1) to[short, -*] ++(-2.7,0) \coord(B2);
+    \draw (B2) to[diode, fill = black, l_ = $D_b$] (U2-|B2) \coord(U7);
+    \draw (U7) to[short, -*] (U7);
+    \draw (B2) -- (origin);
+    \draw (B1) -- (U1|-B1)\coord(B3);
+    \draw (B1) --++(1,0) \coord(B4);
+    \draw (B1) to[short, -*] (B1);
+    \draw (U6) -- (U6-|B4) \coord(U8);
+    \draw (U8) --++ (0,-1) \coord(M1);
+    \draw (M1) node[elmech](motor){M};
+    \draw (motor.south) -- (B4);
+    \end{circuitikz}
+    \caption{Buck converter}
+    \end{figure}
+\end{multicols*}
+\end{document}

@@ -1,0 +1,174 @@
+\documentclass[8pt]{innovativeinnovation-cheatsheet}
+\definecolor{myred}{RGB}{173, 0, 21}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{circuitikz}
+\usepackage{siunitx}
+\tikzset{>=latex} % for LaTeX arrow head	
+\ctikzset{resistors/scale=0.5}			
+\ctikzset{capacitors/scale=0.5}
+\ctikzset{inductors/scale=0.5}
+\ctikzset{sources/scale=0.6}
+\ctikzset{diodes/scale=0.6}
+
+\def\killdepth#1{{\raisebox{0pt}[\height][0pt]{#1}}}
+\def\coord(#1){coordinate(#1)} 
+\def\coord(#1){coordinate(#1) node[circle, red, draw, inner sep=1pt, pin={[red, overlay, inner sep=0.5pt, font=\tiny, pin distance=0.1cm, pin edge={red, overlay,-}]45:#1}](#1-node){}}	
+% Uncomment the above line to show the coordinate node in the circuit
+
+\newcount\myfigurecount
+\newcount\mytablecount
+\myfigurecount = 1
+\mytablecount  = 1
+
+\cheatsheettitle{CircuiTikz Gallery --- Youhao HU}
+
+\begin{document}
+
+\begin{multicols*}{3}
+
+\cheatsheetsection{SS-Type Wireless Power Transfer}
+
+\begin{center}
+\centering
+\begin{tikzpicture}[american, line width=0.2mm]
+\def\w{3}
+\def\h{2}
+\def\wT{1}
+
+\draw (0,0) 
+to[sV, l_=$V_1$] ++(0,\h) \coord(U1top)
+to[C, l_=$C_1$, i=$I_1$] ++(\w,0) 
+to[L, l_=$L_1$, name=L1] ++(0,-\h) \coord(end1)
+to[R, l_=$R_1$] (0,0);	
+
+\draw (end1)++(\wT,0) \coord(begin2)
+to[L, l_=$L_2$, name=L2] ++(0,\h) 
+to[C, l_=$C_2$, i<=$I_2$] ++(\w,0)
+to[R, l_=$R_\text{L}$] ++(0,-\h)
+to[R, l_=$R_2$] (begin2);
+
+\draw
+[<->,violet!90] (L1.core west) \coord(L1cw) to[out=60, in=120]
+node[midway, above]{$M$} (L2.core east) \coord(L2ce);	
+\end{tikzpicture}
+\end{center}
+
+
+\cheatsheetsection{Inverter}
+
+\begin{center}
+    \begin{circuitikz}[american,line width = .2mm]
+        \draw (0,0) \coord(origin);
+        \draw (0,2.7) \coord(U1);
+        \draw (U1) to[V, l = $V_{DC}$] (origin);
+        \draw (U1) to[short,-*] ++(1.5,0) \coord(U2);
+        \draw (U2) -- ++(1.5,0) \coord(U3);
+        \draw (U2) --++(0,-.2) \coord(M1);
+        \draw (M1) node[nigfete, bodydiode, fill = black, scale = .6, anchor = D](S1){S1};
+        \draw (S1.S) to[short, -*]++(0,-.25) \coord(M21);
+        \draw (S1.S) --++(0,-.5) \coord(M2);
+        \draw (M2) node[nigfete, bodydiode, fill = black, scale = .6, anchor = D](S2){S2};
+        \draw (S2.S) --++(0,-.1) \coord(M3);
+    
+    
+        \draw (U3) --++(0,-.2) \coord(SM1);
+        \draw (SM1) node[nigfete, bodydiode, fill = black, scale = .6, anchor = D](S4){S4};
+        \draw (S4.S) to[short, -*]++(0,-.25) \coord(SM21);
+        \draw (S4.S) -- ++(0,-.5) \coord(SM2);
+        \draw (SM2) node[nigfete, bodydiode,  fill = black, scale = .6, anchor = D](S3){S3};
+        \draw (S3.S) --++(0,-.1) \coord(SM3);
+        \draw (origin) to[short,-*]  (M3|-origin)\coord(B1);
+        \draw (B1) -- (SM3|-origin) \coord(B2);
+    
+        \draw(M3) -- (B1);
+        \draw(SM3) -- (B2);
+    
+        \draw(M21) to[R] (SM21);
+        % \draw[help lines, red, step = .5cm] (origin) grid ++(U3);
+    \end{circuitikz}
+\end{center}
+
+\cheatsheetsection{Full Bridge Rectifier}
+
+\begin{center}
+\begin{circuitikz}[american, line width = .2mm]
+\draw (0,0)\coord(origin);
+% \draw [help lines, red, step=.5cm] (0,-.5) grid (4,2);
+\draw (0,2) \coord (U1);
+\draw (2,2) \coord(U2);
+\draw (2,0) \coord(B1);
+\draw (origin) to [sV] (U1);
+\draw (U1) to[short, -*] (U2);
+\path (U2) --++(-1,-1) \coord(C1);
+\path (U2) --++(1,-1) \coord(C2);
+\draw (C1) to[empty diode, fill = myred, color = myred] (U2);
+\draw (U2) to [full diode] (C2);
+\draw (C1) to [empty diode] (B1);
+\draw (B1) to [empty diode] (C2);
+\draw (origin) to[short,-*] (B1);
+\draw (C2) to[short,-*] (C2);
+
+\draw (C2) --++(1,0) \coord(C3);
+\path (C3) --++(0,-1.5) \coord(B2);
+\draw (C3) to[R] (B2);
+\draw (B2) -- (C1|-B2) \coord(B3);
+\path (B3) -- (B3|-origin) \coord(B4);
+\draw (B4) node[jump crossing, rotate = 90] (J1){};
+\draw (J1.west) -- (B3);
+\draw (J1.east) to[short,-*] (C1);
+\end{circuitikz}
+\end{center}
+
+
+\cheatsheetsection{Buck converter with DC machine}
+
+\begin{center}
+\begin{circuitikz}[american,line width = .2mm]
+
+
+\ctikzset{voltage dir=RP}
+\ctikzset{batteries/scale = .8}
+\ctikzset{transistors/scale = .8}
+\ctikzset{inductors/scale = .6}
+\ctikzset{capacitors/scale = .6}
+\ctikzset{diodes/scale = .6}
+\ctikzset{electromechanicals/scale = .8}
+
+
+\draw (0,0) \coord(origin);
+\path (origin) ++ (4,2) \coord(U1);
+% \draw[help lines, red, step = 1cm] (origin) grid ++(U1); % help grid
+\draw (origin) to[battery1] (U1-|origin) \coord(U2);
+\draw (U2) to[short] ++(1,0) \coord(U3);
+\draw (U3) node[nigfete, bodydiode, fill = black, anchor=D, rotate = 90](S1){};
+\draw (S1.S) -- ++(1,0) \coord(U4);
+\draw (S1.G) node[left] {$D$};
+\draw (U4) to[L, l_ = $L_b$] ++ (1,0)\coord(U5);
+\draw (U5) to[short, -*] ++(1,0)\coord(U6);
+\draw (U6) to[C, l_ = $C_b$] (U6|-origin)\coord(B1);
+\draw (B1) to[short, -*] ++(-2.7,0) \coord(B2);
+\draw (B2) to[diode, fill = black, l_ = $D_b$] (U2-|B2) \coord(U7);
+\draw (U7) to[short, -*] (U7);
+\draw (B2) -- (origin);
+\draw (B1) -- (U1|-B1)\coord(B3);
+\draw (B1) --++(1,0) \coord(B4);
+\draw (B1) to[short, -*] (B1);
+\draw (U6) -- (U6-|B4) \coord(U8);
+\draw (U8) --++ (0,-1) \coord(M1);
+\draw (M1) node[elmech](motor){M};
+\draw (motor.south) -- (B4);
+\end{circuitikz}
+\end{center}
+
+
+
+
+
+\vfill
+
+\cheatsheetfooter{Innovative Innovation}{https://github.com/innovativeinnovation}
+
+\end{multicols*}
+
+\end{document}

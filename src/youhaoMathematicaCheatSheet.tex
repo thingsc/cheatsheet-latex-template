@@ -1,0 +1,116 @@
+\documentclass[8pt]{innovativeinnovation-cheatsheet}
+\definecolor{myred}{RGB}{250,127,111}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\newcommand{\myinline}[1]{{\color{innoinnored}\bfseries\ttfamily{#1}}}
+
+\usepackage[os=mac]{menukeys}
+\renewmenumacro{\keys}[+]{shadowedroundedkeys}
+\renewmenumacro{\menu}[>]{angularmenus}
+
+\lstset{
+    basicstyle=\ttfamily,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4,
+    showstringspaces=true,
+    extendedchars=true,
+    inputencoding=utf8,
+    frame=single,
+    language=Mathematica,
+    captionpos=b,
+    keywordstyle=\color{innoinnored}\bfseries,
+%     numbers=left,
+%     numberstyle=\tiny\color{gray},
+}
+
+
+
+\cheatsheettitle{Mathematica Cheat Sheet --- Youhao HU}
+
+\begin{document}
+
+\begin{multicols*}{3}
+
+
+\cheatsheetsection{Mathematica Command line}
+
+\begin{enumerate}[leftmargin=*,nosep]
+    \item[$\bullet$] \lstinline!Clear!\myinline{["`*"]}: Clear all the variables.
+    \item[$\bullet$] \myinline{Clear[w0]}: Clear the variable w0.
+    \item[$\bullet$] \myinline{w0=.}: Clear the variable w0.
+    \item[$\bullet$] \myinline{\%}: The last calculation result.
+    \item[$\bullet$] \keys{\esc + a + \esc}: Insert $\alpha$.
+    \item[$\bullet$] \myinline{\textbackslash[Alpha]}: Insert $\alpha$.
+\end{enumerate}
+
+\cheatsheetsection{Matrix and array}
+\begin{equation}
+    \begin{gathered}
+        A = \left[\begin{array}{ccc}
+            1 & 2 & 3 \\
+            4 & 5 & 6 \\
+            7 & 8 & 9
+        \end{array}\right],\quad
+        B = \left[\begin{array}{ccc}
+            1 & 2 & 3 \\
+            4 & 5 & 6 \\
+            7 & 8 & 9
+        \end{array}\right]\\
+        C= AB
+    \end{gathered}
+\end{equation}
+Rendered as the below code in Mathematica:
+\begin{lstlisting}
+A = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+B = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+C = A.B;
+\end{lstlisting}
+
+\cheatsheetsection{Plot}   
+
+Plot the function $V = \frac{4}{\pi}\frac{V_{in}}{Z_{in2}}$, $Z_{in2} =   \omega M + \frac{R_1 (R_2 + R_e)}{\omega M}
+$ from $Re=0\Omega$ to $Re=10\Omega$ (Assume that all the other variables are defined except $R_e$):
+\begin{lstlisting}
+Zin2 = w M + (R1 * (R2 + Req)) / w / M;
+V2   = 4 / Pi Vin / Zin2;
+Plot[V2, {Req,0,10}]
+\end{lstlisting}
+
+\cheatsheetsection{Plot first-order differential equation}
+\begin{equation}
+    \dot x + 3x = 0,\quad x(0) = 1
+\end{equation}
+Plot the solution $x(t)$ from $t=0$ to $t=10$.
+\begin{lstlisting}
+Clear[x]
+xout = NDSolveValue[{x'[t]+3*x[t]==0,x[0]==1}, x, {t,0,10}]
+Plot[xout[t],{t,0,10},PlotRange->All]
+\end{lstlisting}
+
+\cheatsheetsection{Plot second-order differential equation}
+\begin{equation}
+    \ddot y + \sin(y) = 0,\quad y(0) = 2,\quad \dot y(0) = 1
+\end{equation}
+
+Plot the solution $y(t)$ from $t=-10$ to $t=10$:
+
+\begin{lstlisting}
+Clear[y]
+ode1 = {y''[t] + Sin[y[t]] == 0,y[0]==2,y'[0]==1};
+sol = NDSolve[ode1,y,{t,-10,10}]
+Plot[y[t] /. sol, {t,-10,10}] (* For only y *)
+Plot[Evaluate[{y[t],y'[t],y''[t]} /. sol], {t,-10,10}] (* For y, ydot and yddot*)
+\end{lstlisting}
+
+
+Dolor sed viverra ipsum nunc aliquet bibendum. Senectus et netus et malesuada
+fames ac turpis egestas. Pellentesque id nibh tortor id aliquet.
+
+\vfill
+
+\cheatsheetfooter{Innovative Innovation}{https://github.com/innovativeinnovation}
+
+\end{multicols*}
+
+\end{document}

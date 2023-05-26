@@ -1,5 +1,19 @@
 \documentclass[8pt]{innovativeinnovation-cheatsheet}
 \definecolor{myred}{RGB}{250,127,111}
+\usepackage{enumitem}
+
+\usepackage[os=mac]{menukeys}
+\renewmenumacro{\keys}[+]{shadowedroundedkeys}
+\renewmenumacro{\menu}[>]{roundedmenus}
+\renewmenumacro{\path}[/]{pathswithfolder}
+
+\newcount\myfigurecount
+\newcount\mytablecount
+\myfigurecount = 1
+\mytablecount  = 1
+
+\newcommand{\myinline}[1]{{\color{innoinnored}\bfseries\ttfamily{#1}}}
+\newtheorem{assumption}{Assumption}
 \lstset{
     basicstyle=\ttfamily,
     breaklines=true,
@@ -39,6 +53,8 @@ Here is the content in column 2
 
 \cheatsheetsection{Footnote in two columns}
 
+Footnote mark is in one of the column, but the footnote is at the bottom of the page.
+
 \begin{lstlisting}
 \begin{frame}
 \begin{columns}
@@ -65,6 +81,16 @@ Here is the content in column 2
 \end{figure}
 \end{lstlisting}
 
+\cheatsheetsection{Figure path setting}
+
+Set the images path as \verb|./images/|
+
+\begin{lstlisting}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\end{lstlisting}
+
+\columnbreak
 
 \cheatsheetsection{Figure options}
 \begin{lstlisting}
@@ -73,13 +99,7 @@ Here is the content in column 2
 \includegraphics[height=1cm](USTGZ.png)
 \end{lstlisting}
 
-\vfill
-
-\textit{Use} \verb|\columnbreak| \textit{to break the column}
-
-\columnbreak
-
-\cheatsheetsection{Figure with 2+ titles (no tag)}
+\cheatsheetsection{Figure with 2+ titles (no label)}
 \begin{lstlisting}
 \begin{center}
 \includegraphics[width=.4\linewidth]{SMC.png}
@@ -89,7 +109,7 @@ SMC (Left) and TSMC (Right) comparison
 \end{lstlisting}
 
 
-\cheatsheetsection{Figure with 2+ titles (1 tag)}
+\cheatsheetsection{Figure with 2+ titles (1 label)}
 
 \begin{lstlisting}
 \begin{figure}
@@ -101,7 +121,7 @@ SMC (Left) and TSMC (Right) comparison
 \end{figure}
 \end{lstlisting}
 
-\cheatsheetsection{Figure with 2+ titles (2+ tags)}
+\cheatsheetsection{Figure with 2+ titles (2+ labels)}
 
 
 \begin{lstlisting}
@@ -123,8 +143,104 @@ SMC (Left) and TSMC (Right) comparison
 \end{lstlisting}
 
 
-Dolor sed viverra ipsum nunc aliquet bibendum. Senectus et netus et malesuada
-fames ac turpis egestas. Pellentesque id nibh tortor id aliquet.
+
+\cheatsheetsection{Remark environment}
+\begin{lstlisting}
+\newtheorem{assumption}{Assumption}
+\newtheorem{remark}{Remark}
+\newtheorem{figurebox}{\quad} % To render a box only, used in beamer
+\end{lstlisting}
+Which is rendered as:
+\begin{assumption}
+    This is a new assumption.
+\end{assumption}
+
+\cheatsheetsection{Break the column}
+\begin{enumerate}[label=$\bullet$,leftmargin=*,nosep]
+    \item \myinline{\textbackslash columnbreak}
+\end{enumerate}
+
+\cheatsheetsection{DIY your own counter}
+
+\begin{lstlisting}
+\newcount\myfigurecount
+\newcount\mytablecount
+\myfigurecount = 1
+\mytablecount = 1
+\end{lstlisting}
+
+Usage:
+
+\begin{lstlisting}
+Table \the\mytablecount. Some rules of the regular expression
+\advance\mytablecount by 1
+Table \the\mytablecount. Other rules of the regular expression
+\end{lstlisting}
+
+Rendered as below:
+
+Table 1. Some rules of the regular expression
+
+Table 2. Other rules of the regular expression
+
+\cheatsheetsection{VSCODE usilization}
+
+
+\begin{center}
+    Table \the\mytablecount. Some shortcut keys in VSCODE
+    \advance\mytablecount by 1
+
+\begin{tabular}{cl}
+    \hline
+    Keys & Description\\
+    \hline
+\keys{\cmd + \shift + p} & Open command palette\\
+\keys{\cmd + \shift + x} & Open extension tab\\
+\keys{\cmd + \Alt + v}   & Open internal PDF viewer\\
+\keys{\cmd + \Alt + z}   & Line-wrap switch\\
+\keys{\cmd + \Alt + x}   & Open LaTeX Workshop plate\\
+\keys{\cmd + clicking}   & Navigate content from PDF to tex file\\
+
+\hline
+\end{tabular}
+\end{center}
+
+\cheatsheetsection{Fancy keys/manus/paths}
+
+
+
+\begin{lstlisting}
+\usepackage{menukeys}
+\renewmenumacro{\keys}[+]{shadowedroundedkeys}
+\renewmenumacro{\menu}[>]{roundedmenus}
+\renewmenumacro{\path}[/]{pathswithfolder}
+
+\menu{Extras > Settings > {Units, rulers and origin}}
+\path{/Users/youhao/mdfiles/research\_related/ latex\_cheatsheet.tex}
+\keys{\Alt + \shift + x}
+
+\end{lstlisting}
+
+Which is rendered as:
+
+\menu{Extras > Settings > {Units, rulers and origin}}
+
+\path{/Users/youhao/mdfiles/research\_related/latex\_cheatsheet.tex}
+
+\keys{\Alt + \shift + x}
+
+
+\cheatsheetsection{CircuitTikz vertical line}
+
+
+\begin{lstlisting}
+\begin{circuitikz}
+\draw (0,0) \coord(origin);
+\draw (2,2) \coord(U1);
+\draw (U1) -- (origin-|U1) \coord(B1);
+\draw (origin) -- (B1);
+\end{circuitikz}
+\end{lstlisting}
 
 \vfill
 
