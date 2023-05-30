@@ -47,6 +47,7 @@
     \item \lstinline!what!: list Matlab/simulink files in current folder
     \item {\color{innoinnored}\bfseries\ttfamily more on}: display output one screen at a time, space to continue, q to quit
     \item {\color{innoinnored}\bfseries\ttfamily more off}: display output continuously
+    \item {\color{innoinnored}\bfseries\ttfamily warning off}: turn off warning
 \end{enumerate}
 
 \cheatsheetsection{Find files using Regular Expression}
@@ -88,6 +89,13 @@ h.FontSize    = fontsize;
 h.Location    = 'northeast';
 h.Orientation = 'horizon';
 title('nameoftitle','interpreter','latex')% for instance, name = $V_o$
+\end{lstlisting}
+
+\cheatsheetsection{Multi lines of title}
+
+
+\begin{lstlisting}    
+title({'This is the first line'; 'This is the second line'});
 \end{lstlisting}
 
 \cheatsheetsection{Save figure}
@@ -294,8 +302,13 @@ plot(x,p(1) * x + p(2))
 
 Q: SIMULINK does not work properly even with identical parameters.
 
-A: Check the Model workspace and the Base workspace. The Model workspace has higher priority than the Base workspace. If the same variable is defined in both workspaces, the value in the Model workspace will be used.
-
+A: Check the workspace priority, 
+making sure variables are well defined and 
+no other higher priority variables with the same name.
+\begin{itemize}
+    \item \myinline{Higher priority:} Model workspace.
+    \item \myinline{Lower priority:} Base workspace.
+\end{itemize}
 
 
 
