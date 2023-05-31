@@ -39,15 +39,19 @@
 
 \begin{enumerate}[label=$\bullet$,leftmargin=*,nosep]
     \item \lstinline!dir!: list files and folders in current folder
-    \item \lstinline!dir('*.txt')!: find txt files in current folder
+    \item \myinline{dir('*.txt')}: find txt files in current folder
+    \item \myinline{dir('*motor*')}: find files with ``motor'' in the file name
     \item \lstinline!pwd!: show current folder
     \item \lstinline!cd!:  change current folder
-    \item \lstinline!delete('filename')!: delete file
-    \item {\color{innoinnored}\bfseries\ttfamily movefile}\lstinline{('oldpath/oldname','newpath/newname')}: rename or move file    
+    \item \myinline{delete('filename')}: delete file
+    \item \myinline{movefile('oldpath/oldname','newpath/newname')}: rename or move file    
     \item \lstinline!what!: list Matlab/simulink files in current folder
     \item {\color{innoinnored}\bfseries\ttfamily more on}: display output one screen at a time, space to continue, q to quit
     \item {\color{innoinnored}\bfseries\ttfamily more off}: display output continuously
     \item {\color{innoinnored}\bfseries\ttfamily warning off}: turn off warning
+    \item \myinline{exit}: exit MATLAB
+    \item \myinline{close\_system}: close all Simulink models
+    \item \myinline{save\_system}: save all Simulink models
 \end{enumerate}
 
 \cheatsheetsection{Find files using Regular Expression}
